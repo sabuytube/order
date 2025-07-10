@@ -32,32 +32,38 @@ export default function OrderPage() {
   };
 
   return (
-    <div>
-      <h1 className="text-xl font-bold mb-4">Create Order</h1>
+    <div className="max-w-xl mx-auto bg-white shadow p-6 rounded">
+      <h1 className="text-2xl font-bold mb-6">Create Order</h1>
       {items.map((item, index) => (
-        <div key={index} className="mb-2 flex gap-2">
+        <div key={index} className="mb-3 flex gap-2">
           <input
-            className="border p-1"
+            className="border rounded p-2 flex-1"
             placeholder="Name"
             value={item.name}
             onChange={(e) => updateItem(index, 'name', e.target.value)}
           />
           <input
-            className="border p-1"
+            className="border rounded p-2 w-24"
             placeholder="Unit"
             value={item.unit}
             onChange={(e) => updateItem(index, 'unit', e.target.value)}
           />
           <input
             type="number"
-            className="border p-1 w-20"
+            className="border rounded p-2 w-24"
             value={item.quantity}
             onChange={(e) => updateItem(index, 'quantity', Number(e.target.value))}
           />
         </div>
       ))}
-      <button className="bg-blue-500 text-white px-4 py-2 mr-2" onClick={addItem}>Add Item</button>
-      <button className="bg-green-500 text-white px-4 py-2" onClick={submit}>Submit Order</button>
+      <div className="mt-4 flex justify-end gap-2">
+        <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={addItem}>
+          Add Item
+        </button>
+        <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
+          Submit Order
+        </button>
+      </div>
     </div>
   );
 }

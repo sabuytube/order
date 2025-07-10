@@ -41,10 +41,10 @@ export default function SummaryPage() {
   const total = items.reduce((sum, item) => sum + (item.unitPrice || 0) * item.quantity, 0);
 
   return (
-    <div>
-      <h1 className="text-xl font-bold mb-4">Order Summary</h1>
+    <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded">
+      <h1 className="text-2xl font-bold mb-6">Order Summary</h1>
       <div id="summary">
-        <table className="w-full mb-4 border">
+        <table className="w-full mb-4 border text-sm">
           <thead>
             <tr className="border-b">
               <th className="p-2 text-left">Name</th>
@@ -63,7 +63,7 @@ export default function SummaryPage() {
                 <td className="p-2 text-center">
                   <input
                     type="number"
-                    className="border p-1 w-24"
+                    className="border rounded p-2 w-24"
                     value={item.unitPrice || ''}
                     onChange={(e) => updatePrice(index, Number(e.target.value))}
                   />
@@ -77,8 +77,14 @@ export default function SummaryPage() {
         </table>
         <div className="text-right font-bold mb-4">Total: {total.toFixed(2)}</div>
       </div>
-      <button className="bg-blue-500 text-white px-4 py-2 mr-2" onClick={save}>Save Prices</button>
-      <button className="bg-green-500 text-white px-4 py-2" onClick={exportPDF}>Export PDF</button>
+      <div className="mt-4 flex justify-end gap-2">
+        <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={save}>
+          Save Prices
+        </button>
+        <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={exportPDF}>
+          Export PDF
+        </button>
+      </div>
     </div>
   );
 }
