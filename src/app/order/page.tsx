@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface Item {
@@ -11,6 +11,24 @@ interface Item {
 export default function OrderPage() {
   const router = useRouter();
   const [items, setItems] = useState<Item[]>([{ name: '', unit: '', quantity: 1 }]);
+  const [products, setProducts] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then((res) => res.json())
+      .then((data) => setProducts(data.map((p: { name: string }) => p.name)));
+  }, []);
+
+  const addProduct = async () => {
+    const name = prompt('Product name');
+    if (!name) return;
+    await fetch('/api/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+    });
+    setProducts((prev) => [...prev, name]);
+  };
 
   const addItem = () => {
     setItems([...items, { name: '', unit: '', quantity: 1 }]);
@@ -35,13 +53,28 @@ export default function OrderPage() {
     <div className="max-w-xl mx-auto bg-white shadow p-6 rounded">
       <h1 className="text-2xl font-bold mb-6">Create Order</h1>
       {items.map((item, index) => (
-        <div key={index} className="mb-3 flex gap-2">
-          <input
-            className="border rounded p-2 flex-1"
-            placeholder="Name"
-            value={item.name}
-            onChange={(e) => updateItem(index, 'name', e.target.value)}
-          />
+        <div key={index} className="mb-3 flex gap-2 items-center">
+          <div className="flex-1 relative">
+            <input
+              list={`products-${index}`}
+              className="border rounded p-2 w-full"
+              placeholder="Name"
+              value={item.name}
+              onChange={(e) => updateItem(index, 'name', e.target.value)}
+            />
+            <datalist id={`products-${index}`}>
+              {products.map((p) => (
+                <option key={p} value={p} />
+              ))}
+            </datalist>
+          </div>
+          <button
+            type="button"
+            onClick={addProduct}
+            className="px-2 bg-gray-200 rounded"
+          >
+            +
+          </button>
           <input
             className="border rounded p-2 w-24"
             placeholder="Unit"

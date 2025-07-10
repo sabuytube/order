@@ -8,3 +8,9 @@ export async function POST(req: Request) {
   const order = await Order.create(data);
   return NextResponse.json({ id: order._id });
 }
+
+export async function GET() {
+  await connectDB();
+  const orders = await Order.find();
+  return NextResponse.json(orders);
+}
