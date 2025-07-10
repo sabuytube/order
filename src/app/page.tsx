@@ -11,6 +11,12 @@ export default function HomePage() {
       >
         Create Order
       </Link>
+      <Link
+        href="/history"
+        className="inline-block bg-gray-600 text-white px-6 py-3 rounded hover:bg-gray-700 ml-4"
+      >
+        View History
+      </Link>
     </div>
   );
 }

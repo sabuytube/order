@@ -20,6 +20,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                   Create Order
                 </Link>
               </li>
+              <li>
+                <Link href="/history" className="hover:underline">
+                  History
+                </Link>
+              </li>
             </ul>
           </div>
         </nav>
