@@ -30,4 +30,4 @@ MONGO_DB_NAME=<your database name>
 
 ## Deployment
 
-The project is configured for deployment on Vercel. Ensure your environment variables are set in the Vercel dashboard.
+The project is configured for deployment on Vercel. Pushes to the `main` branch trigger the GitHub Actions workflow located in `.github/workflows/vercel.yml`, which builds and deploys the app using your Vercel project settings. Ensure the `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` secrets are configured in your repository, and that the required environment variables are defined in the Vercel dashboard.
