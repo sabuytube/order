@@ -39,7 +39,7 @@ export default function SummaryPage() {
             <tr className="border-b">
               <th className="p-2 text-left">Name</th>
               <th className="p-2">Unit</th>
-              <th className="p-2">Qty</th>
+              <th className="p-2">Price</th>
             </tr>
           </thead>
           <tbody>
@@ -47,7 +47,7 @@ export default function SummaryPage() {
               <tr key={index} className="border-b">
                 <td className="p-2">{item.name}</td>
                 <td className="p-2 text-center">{item.unit}</td>
-                <td className="p-2 text-center">{item.quantity}</td>
+                <td className="p-2 text-center"></td>
               </tr>
             ))}
           </tbody>

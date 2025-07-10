@@ -5,12 +5,11 @@ import { useRouter } from 'next/navigation';
 interface Item {
   name: string;
   unit: string;
-  quantity: number;
 }
 
 export default function OrderPage() {
   const router = useRouter();
-  const [items, setItems] = useState<Item[]>([{ name: '', unit: '', quantity: 1 }]);
+  const [items, setItems] = useState<Item[]>([{ name: '', unit: '' }]);
   const [products, setProducts] = useState<string[]>([]);
 
   useEffect(() => {
@@ -31,10 +30,10 @@ export default function OrderPage() {
   };
 
   const addItem = () => {
-    setItems([...items, { name: '', unit: '', quantity: 1 }]);
+    setItems([...items, { name: '', unit: '' }]);
   };
 
-  const updateItem = (index: number, field: keyof Item, value: string | number) => {
+  const updateItem = (index: number, field: keyof Item, value: string) => {
     const updated = items.map((item, i) => (i === index ? { ...item, [field]: value } : item));
     setItems(updated);
   };
@@ -80,12 +79,6 @@ export default function OrderPage() {
             placeholder="Unit"
             value={item.unit}
             onChange={(e) => updateItem(index, 'unit', e.target.value)}
-          />
-          <input
-            type="number"
-            className="border rounded p-2 w-24"
-            value={item.quantity}
-            onChange={(e) => updateItem(index, 'quantity', Number(e.target.value))}
           />
         </div>
       ))}
