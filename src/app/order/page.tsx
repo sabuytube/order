@@ -58,10 +58,10 @@ export default function OrderPage() {
       ))}
       <div className="mt-4 flex justify-end gap-2">
         <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={addItem}>
-          Add Item
+          + เพิ่มรายการ
         </button>
         <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
-          Submit Order
+          ส่งใบสั่งซื้อ
         </button>
       </div>
     </div>
