@@ -14,3 +14,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   const order = await Order.findByIdAndUpdate(params.id, data, { new: true });
   return NextResponse.json(order);
 }
+
+export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+  await connectDB();
+  await Order.findByIdAndDelete(params.id);
+  return NextResponse.json({ success: true });
+}

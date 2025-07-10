@@ -22,24 +22,26 @@ export default function SummaryPage() {
 
   const exportImage = useCallback(async () => {
     const element = document.getElementById('summary');
-    if (!element) return;
+    if (!element || !('clipboard' in navigator)) return;
     const canvas = await html2canvas(element);
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL('image/png');
-    link.download = `order-${id}.png`;
-    link.click();
+    canvas.toBlob(async (blob) => {
+      if (!blob) return;
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': blob }) as any,
+      ]);
+    });
   }, [id]);
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded">
-      <h1 className="text-2xl font-bold mb-6">Order Summary</h1>
+      <h1 className="text-2xl font-bold mb-6">สรุปคำสั่งซื้อ</h1>
       <div id="summary">
         <table className="w-full mb-4 border text-sm">
           <thead>
             <tr className="border-b">
-              <th className="p-2 text-left">Name</th>
-              <th className="p-2">Unit</th>
-              <th className="p-2">Price</th>
+              <th className="p-2 text-left">ชื่อสินค้า</th>
+              <th className="p-2">หน่วย</th>
+              <th className="p-2">ราคา</th>
             </tr>
           </thead>
           <tbody>
@@ -55,7 +57,7 @@ export default function SummaryPage() {
       </div>
       <div className="mt-4 flex justify-end">
         <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={exportImage}>
-          Save as Image
+          คัดลอกรูปภาพ
         </button>
       </div>
     </div>
