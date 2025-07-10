@@ -18,12 +18,12 @@ export default function HistoryPage() {
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded">
-      <h1 className="text-2xl font-bold mb-6">Order History</h1>
+      <h1 className="text-2xl font-bold mb-6">ประวัติคำสั่งซื้อ</h1>
       <table className="w-full border text-sm">
         <thead>
           <tr className="border-b">
-            <th className="p-2 text-left">Order ID</th>
-            <th className="p-2 text-center">Items</th>
+            <th className="p-2 text-left">รหัสคำสั่งซื้อ</th>
+            <th className="p-2 text-center">จำนวนรายการ</th>
             <th className="p-2"></th>
           </tr>
         </thead>
@@ -34,7 +34,7 @@ export default function HistoryPage() {
               <td className="p-2 text-center">{order.items.length}</td>
               <td className="p-2 text-center">
                 <Link href={`/summary/${order._id}`} className="text-blue-600 hover:underline">
-                  View
+                  ดู
                 </Link>
               </td>
             </tr>

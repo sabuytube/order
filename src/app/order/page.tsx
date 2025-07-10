@@ -5,12 +5,11 @@ import { useRouter } from 'next/navigation';
 interface Item {
   name: string;
   unit: string;
-  quantity: number;
 }
 
 export default function OrderPage() {
   const router = useRouter();
-  const [items, setItems] = useState<Item[]>([{ name: '', unit: '', quantity: 1 }]);
+  const [items, setItems] = useState<Item[]>([{ name: '', unit: '' }]);
   const [products, setProducts] = useState<string[]>([]);
 
   useEffect(() => {
@@ -20,7 +19,7 @@ export default function OrderPage() {
   }, []);
 
   const addProduct = async () => {
-    const name = prompt('Product name');
+    const name = prompt('ชื่อสินค้า');
     if (!name) return;
     await fetch('/api/products', {
       method: 'POST',
@@ -31,10 +30,10 @@ export default function OrderPage() {
   };
 
   const addItem = () => {
-    setItems([...items, { name: '', unit: '', quantity: 1 }]);
+    setItems([...items, { name: '', unit: '' }]);
   };
 
-  const updateItem = (index: number, field: keyof Item, value: string | number) => {
+  const updateItem = (index: number, field: keyof Item, value: string) => {
     const updated = items.map((item, i) => (i === index ? { ...item, [field]: value } : item));
     setItems(updated);
   };
@@ -51,14 +50,14 @@ export default function OrderPage() {
 
   return (
     <div className="max-w-xl mx-auto bg-white shadow p-6 rounded">
-      <h1 className="text-2xl font-bold mb-6">Create Order</h1>
+      <h1 className="text-2xl font-bold mb-6">สร้างใบสั่งซื้อ</h1>
       {items.map((item, index) => (
         <div key={index} className="mb-3 flex gap-2 items-center">
           <div className="flex-1 relative">
             <input
               list={`products-${index}`}
               className="border rounded p-2 w-full"
-              placeholder="Name"
+              placeholder="ชื่อสินค้า"
               value={item.name}
               onChange={(e) => updateItem(index, 'name', e.target.value)}
             />
@@ -77,15 +76,9 @@ export default function OrderPage() {
           </button>
           <input
             className="border rounded p-2 w-24"
-            placeholder="Unit"
+            placeholder="หน่วย"
             value={item.unit}
             onChange={(e) => updateItem(index, 'unit', e.target.value)}
-          />
-          <input
-            type="number"
-            className="border rounded p-2 w-24"
-            value={item.quantity}
-            onChange={(e) => updateItem(index, 'quantity', Number(e.target.value))}
           />
         </div>
       ))}
