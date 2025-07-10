@@ -13,6 +13,7 @@ interface Item {
 export default function SummaryPage() {
   const { id } = useParams();
   const [items, setItems] = useState<Item[]>([]);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`/api/orders/${id}`)
@@ -21,8 +22,16 @@ export default function SummaryPage() {
   }, [id]);
 
   const exportImage = useCallback(async () => {
+    if (!('clipboard' in navigator)) return;
+    if (imageUrl) {
+      const blob = await (await fetch(imageUrl)).blob();
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': blob }) as any,
+      ]);
+      return;
+    }
     const element = document.getElementById('summary');
-    if (!element || !('clipboard' in navigator)) return;
+    if (!element) return;
     const canvas = await html2canvas(element);
     canvas.toBlob(async (blob) => {
       if (!blob) return;
@@ -30,12 +39,27 @@ export default function SummaryPage() {
         new ClipboardItem({ 'image/png': blob }) as any,
       ]);
     });
-  }, [id]);
+  }, [id, imageUrl]);
+
+  useEffect(() => {
+    if (items.length > 0 && !imageUrl) {
+      const element = document.getElementById('summary');
+      if (!element) return;
+      html2canvas(element).then((canvas) => {
+        setImageUrl(canvas.toDataURL('image/png'));
+      });
+    }
+  }, [items, imageUrl]);
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded">
       <h1 className="text-2xl font-bold mb-6">สรุปคำสั่งซื้อ</h1>
-      <div id="summary">
+      {imageUrl && (
+        <div className="mb-4">
+          <img src={imageUrl} alt="สรุปคำสั่งซื้อ" className="w-full border" />
+        </div>
+      )}
+      <div id="summary" className={imageUrl ? 'hidden' : ''}>
         <table className="w-full mb-4 border text-sm">
           <thead>
             <tr className="border-b">
