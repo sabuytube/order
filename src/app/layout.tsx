@@ -8,21 +8,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-screen bg-gray-50">
         <nav className="bg-gray-800 text-white">
           <div className="container mx-auto p-4 flex items-center justify-between">
-            <div className="font-bold text-xl">ระบบจัดการคำสั่งซื้อ</div>
+            <Link href="/" className="font-bold text-xl hover:underline">
+              ระบบจัดการคำสั่งซื้อ
+            </Link>
             <ul className="flex gap-4">
-              <li>
-                <Link href="/" className="hover:underline">
-                  หน้าแรก
-                </Link>
-              </li>
               <li>
                 <Link href="/order" className="hover:underline">
                   สร้างใบสั่งซื้อ
-                </Link>
-              </li>
-              <li>
-                <Link href="/history" className="hover:underline">
-                  ดูย้อนหลัง
                 </Link>
               </li>
             </ul>
