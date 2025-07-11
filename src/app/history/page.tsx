@@ -5,6 +5,7 @@ import Link from 'next/link';
 interface Order {
   _id: string;
   items: { name: string; unit: string; quantity: number }[];
+  shopName: string;
 }
 
 export default function HistoryPage() {
@@ -16,10 +17,6 @@ export default function HistoryPage() {
       .then((data) => setOrders(data));
   }, []);
 
-  const remove = async (id: string) => {
-    await fetch(`/api/orders/${id}`, { method: 'DELETE' });
-    setOrders((prev) => prev.filter((o) => o._id !== id));
-  };
 
   return (
     <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded">
@@ -32,34 +29,23 @@ export default function HistoryPage() {
           สร้างใบสั่งซื้อ
         </Link>
       </div>
-      <table className="w-full border text-sm">
-        <thead>
-          <tr className="border-b">
-            <th className="p-2 text-left">รหัสคำสั่งซื้อ</th>
-            <th className="p-2 text-center">จำนวนรายการ</th>
-            <th className="p-2 text-center">การจัดการ</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order._id} className="border-b">
-              <td className="p-2">{order._id}</td>
-              <td className="p-2 text-center">{order.items.length}</td>
-              <td className="p-2 text-center space-x-2">
-                <Link href={`/summary/${order._id}`} className="text-blue-600 hover:underline">
-                  ดู
-                </Link>
-                <Link href={`/order/${order._id}`} className="text-green-600 hover:underline">
-                  แก้ไข
-                </Link>
-                <button onClick={() => remove(order._id)} className="text-red-600 hover:underline">
-                  ลบ
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="grid gap-4">
+        {orders.map((order) => (
+          <div key={order._id} className="border rounded p-4">
+            <div className="font-semibold">{order.shopName}</div>
+            <div className="text-sm text-gray-500">รหัส: {order._id}</div>
+            <div className="text-sm mb-2">จำนวนรายการ {order.items.length}</div>
+            <div className="space-x-2">
+              <Link href={`/summary/${order._id}`} className="text-blue-600 hover:underline">
+                ดู
+              </Link>
+              <Link href={`/order/${order._id}`} className="text-green-600 hover:underline">
+                แก้ไข
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

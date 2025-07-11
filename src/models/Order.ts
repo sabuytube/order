@@ -8,6 +8,7 @@ type Item = {
 };
 
 export interface OrderDocument extends Document {
+  shopName: string;
   items: Item[];
 }
 
@@ -19,6 +20,7 @@ const ItemSchema = new Schema<Item>({
 });
 
 const OrderSchema = new Schema<OrderDocument>({
+  shopName: { type: String, required: true },
   items: [ItemSchema],
 });
 

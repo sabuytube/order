@@ -10,6 +10,7 @@ interface Item {
 export default function EditOrderPage() {
   const router = useRouter();
   const { id } = useParams();
+  const [shopName, setShopName] = useState('');
   const [items, setItems] = useState<Item[]>([]);
   const [products, setProducts] = useState<string[]>([]);
 
@@ -22,7 +23,10 @@ export default function EditOrderPage() {
   useEffect(() => {
     fetch(`/api/orders/${id}`)
       .then((res) => res.json())
-      .then((data) => setItems(data.items));
+      .then((data) => {
+        setShopName(data.shopName);
+        setItems(data.items);
+      });
   }, [id]);
 
   const addProduct = async () => {
@@ -53,7 +57,7 @@ export default function EditOrderPage() {
     await fetch(`/api/orders/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items }),
+      body: JSON.stringify({ shopName, items }),
     });
     router.push(`/summary/${id}`);
   };
@@ -61,6 +65,12 @@ export default function EditOrderPage() {
   return (
     <div className="max-w-xl mx-auto bg-white shadow p-6 rounded">
       <h1 className="text-2xl font-bold mb-6">แก้ไขใบสั่งซื้อ</h1>
+      <input
+        className="border rounded p-2 w-full mb-4"
+        placeholder="ชื่อร้าน"
+        value={shopName}
+        onChange={(e) => setShopName(e.target.value)}
+      />
       {items.map((item, index) => (
         <div key={index} className="mb-3 flex gap-2 items-center">
           <div className="flex-1 relative">

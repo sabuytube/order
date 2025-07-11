@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import html2canvas from 'html2canvas';
 
@@ -13,33 +13,18 @@ interface Item {
 export default function SummaryPage() {
   const { id } = useParams();
   const [items, setItems] = useState<Item[]>([]);
+  const [shopName, setShopName] = useState('');
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`/api/orders/${id}`)
       .then((res) => res.json())
-      .then((data) => setItems(data.items));
+      .then((data) => {
+        setShopName(data.shopName);
+        setItems(data.items);
+      });
   }, [id]);
 
-  const exportImage = useCallback(async () => {
-    if (!('clipboard' in navigator)) return;
-    if (imageUrl) {
-      const blob = await (await fetch(imageUrl)).blob();
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob }) as any,
-      ]);
-      return;
-    }
-    const element = document.getElementById('summary');
-    if (!element) return;
-    const canvas = await html2canvas(element);
-    canvas.toBlob(async (blob) => {
-      if (!blob) return;
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob }) as any,
-      ]);
-    });
-  }, [id, imageUrl]);
 
   useEffect(() => {
     if (items.length > 0 && !imageUrl) {
@@ -79,11 +64,7 @@ export default function SummaryPage() {
           </tbody>
         </table>
       </div>
-      <div className="mt-4 flex justify-end">
-        <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={exportImage}>
-          คัดลอกรูปภาพ
-        </button>
-      </div>
+      <div className="mt-4 text-right text-sm text-gray-500">{shopName}</div>
     </div>
   );
 }
