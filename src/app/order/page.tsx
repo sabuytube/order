@@ -9,6 +9,7 @@ interface Item {
 
 export default function OrderPage() {
   const router = useRouter();
+  const [shopName, setShopName] = useState('');
   const [items, setItems] = useState<Item[]>([{ name: '', unit: '' }]);
   const [products, setProducts] = useState<string[]>([]);
 
@@ -42,7 +43,7 @@ export default function OrderPage() {
     const res = await fetch('/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items }),
+      body: JSON.stringify({ shopName, items }),
     });
     const data = await res.json();
     router.push(`/summary/${data.id}`);
@@ -51,6 +52,12 @@ export default function OrderPage() {
   return (
     <div className="max-w-xl mx-auto bg-white shadow p-6 rounded">
       <h1 className="text-2xl font-bold mb-6">สร้างใบสั่งซื้อ</h1>
+      <input
+        className="border rounded p-2 w-full mb-4"
+        placeholder="ชื่อร้าน"
+        value={shopName}
+        onChange={(e) => setShopName(e.target.value)}
+      />
       {items.map((item, index) => (
         <div key={index} className="mb-3 flex gap-2 items-center">
           <div className="flex-1 relative">
