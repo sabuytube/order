@@ -45,7 +45,8 @@ export default function SummaryPage() {
         </div>
       )}
       <div id="summary" className={imageUrl ? 'hidden' : ''}>
-        <table className="w-full mb-4 border text-sm">
+        <table className="w-full mb-4 border text-sm border-collapse">
+          <caption className="p-2 font-semibold text-center">{shopName}</caption>
           <thead>
             <tr className="border-b">
               <th className="p-2 text-left">ชื่อสินค้า</th>
@@ -54,11 +55,6 @@ export default function SummaryPage() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td colSpan={3} className="p-2 font-semibold text-center">
-                {shopName}
-              </td>
-            </tr>
             {items.map((item, index) => (
               <tr key={index} className="border-b">
                 <td className="p-2">{item.name}</td>
@@ -69,7 +65,6 @@ export default function SummaryPage() {
           </tbody>
         </table>
       </div>
-      <div className="mt-4 text-right text-sm text-gray-500">{shopName}</div>
     </div>
   );
 }
