@@ -6,6 +6,7 @@ interface Item {
   name: string;
   unit: string;
   unitPrice?: number;
+  comment?: string;
 }
 
 export default function PricePage() {
@@ -32,6 +33,13 @@ export default function PricePage() {
     setItems(updated);
   };
 
+  const updateComment = (index: number, value: string) => {
+    const updated = items.map((item, i) =>
+      i === index ? { ...item, comment: value } : item
+    );
+    setItems(updated);
+  };
+
   const submit = async () => {
     await fetch(`/api/orders/${id}`, {
       method: 'PUT',
@@ -45,7 +53,11 @@ export default function PricePage() {
   };
 
   const clearPrices = async () => {
-    const cleared = items.map((item) => ({ ...item, unitPrice: undefined }));
+    const cleared = items.map((item) => ({
+      ...item,
+      unitPrice: undefined,
+      comment: '',
+    }));
     setItems(cleared);
     await fetch(`/api/orders/${id}`, {
       method: 'PUT',
@@ -63,6 +75,7 @@ export default function PricePage() {
           <tr className="border-b">
             <th className="p-2 text-left">ชื่อสินค้า</th>
             <th className="p-2 text-center">หน่วย</th>
+            <th className="p-2 text-center">comment</th>
             <th className="p-2 text-center">ราคา</th>
           </tr>
         </thead>
@@ -71,6 +84,14 @@ export default function PricePage() {
             <tr key={index} className="border-b">
               <td className="p-2">{item.name}</td>
               <td className="p-2 text-center">{item.unit}</td>
+              <td className="p-2 text-center">
+                <input
+                  type="text"
+                  className="border rounded p-1 w-24"
+                  value={item.comment ?? ''}
+                  onChange={(e) => updateComment(index, e.target.value)}
+                />
+              </td>
               <td className="p-2 text-center">
                 <input
                   type="number"
@@ -84,7 +105,7 @@ export default function PricePage() {
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan={2} className="p-2 font-semibold text-right">
+            <td colSpan={3} className="p-2 font-semibold text-right">
               รวม
             </td>
             <td className="p-2 text-center font-semibold">{total}</td>
@@ -93,7 +114,7 @@ export default function PricePage() {
       </table>
       <div className="mt-4 flex justify-between">
         <button className="text-red-600" onClick={clearPrices}>
-          ลบราคา
+          clear
         </button>
         <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
           บันทึกราคา
