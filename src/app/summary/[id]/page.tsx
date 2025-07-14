@@ -30,6 +30,8 @@ export default function SummaryPage() {
       body: JSON.stringify({ shopName, items: cleared }),
     });
     router.refresh();
+    // force reload so the screenshot reflects cleared prices
+    window.location.reload();
   };
 
   useEffect(() => {
