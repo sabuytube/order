@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import html2canvas from 'html2canvas';
 
 interface Item {
@@ -12,6 +12,7 @@ interface Item {
 
 export default function SummaryPage() {
   const { id } = useParams();
+  const router = useRouter();
   const [items, setItems] = useState<Item[]>([]);
   const [shopName, setShopName] = useState('');
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -19,6 +20,17 @@ export default function SummaryPage() {
     (sum, item) => sum + ((item.unitPrice || 0) * (item.quantity || 1)),
     0
   );
+
+  const clearPrices = async () => {
+    const cleared = items.map((item) => ({ ...item, unitPrice: undefined }));
+    setItems(cleared);
+    await fetch(`/api/orders/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shopName, items: cleared }),
+    });
+    router.refresh();
+  };
 
   useEffect(() => {
     fetch(`/api/orders/${id}`)
@@ -74,6 +86,11 @@ export default function SummaryPage() {
             </tr>
           </tfoot>
         </table>
+        <div className="mt-4 flex justify-between">
+          <button className="text-red-600" onClick={clearPrices}>
+            ลบราคา
+          </button>
+        </div>
       </div>
     </div>
   );

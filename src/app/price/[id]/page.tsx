@@ -38,7 +38,19 @@ export default function PricePage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ shopName, items }),
     });
-    router.push(`/summary/${id}`);
+    // stay on the same page after saving
+    router.refresh();
+  };
+
+  const clearPrices = async () => {
+    const cleared = items.map((item) => ({ ...item, unitPrice: undefined }));
+    setItems(cleared);
+    await fetch(`/api/orders/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shopName, items: cleared }),
+    });
+    router.refresh();
   };
 
   return (
@@ -77,7 +89,10 @@ export default function PricePage() {
           </tr>
         </tfoot>
       </table>
-      <div className="text-right mt-4">
+      <div className="mt-4 flex justify-between">
+        <button className="text-red-600" onClick={clearPrices}>
+          ลบราคา
+        </button>
         <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
           บันทึก
         </button>
