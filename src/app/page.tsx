@@ -44,13 +44,20 @@ export default function HomePage() {
             <div className="text-sm text-gray-500">
               จำนวนรายการ {order.items.length}
             </div>
-            <div className="mt-2 text-right">
+            <div className="mt-2 text-right space-x-2">
               <Link
                 href={`/order/${order._id}`}
                 className="bg-blue-600 text-white px-3 py-1 rounded"
                 onClick={(e) => e.stopPropagation()}
               >
                 แก้ไข
+              </Link>
+              <Link
+                href={`/price/${order._id}`}
+                className="bg-red-600 text-white px-3 py-1 rounded"
+                onClick={(e) => e.stopPropagation()}
+              >
+                ห้ามกด
               </Link>
             </div>
           </div>
