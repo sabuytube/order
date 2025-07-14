@@ -113,7 +113,7 @@ export default function PricePage() {
         </tfoot>
       </table>
       <div className="mt-4 flex justify-between">
-        <button className="text-red-600" onClick={clearPrices}>
+        <button className="text-red-600 hidden" onClick={clearPrices}>
           clear
         </button>
         <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
