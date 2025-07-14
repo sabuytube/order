@@ -8,6 +8,7 @@ interface Item {
   unit: string;
   quantity: number;
   unitPrice?: number;
+  comment?: string;
 }
 
 export default function SummaryPage() {
@@ -22,7 +23,11 @@ export default function SummaryPage() {
   );
 
   const clearPrices = async () => {
-    const cleared = items.map((item) => ({ ...item, unitPrice: undefined }));
+    const cleared = items.map((item) => ({
+      ...item,
+      unitPrice: undefined,
+      comment: '',
+    }));
     setItems(cleared);
     await fetch(`/api/orders/${id}`, {
       method: 'PUT',
@@ -69,6 +74,7 @@ export default function SummaryPage() {
             <tr className="border-b">
               <th className="p-2 text-left">ชื่อสินค้า</th>
               <th className="p-2">หน่วย</th>
+              <th className="p-2">comment</th>
               <th className="p-2">ราคา</th>
             </tr>
           </thead>
@@ -77,13 +83,14 @@ export default function SummaryPage() {
               <tr key={index} className="border-b">
                 <td className="p-2">{item.name}</td>
                 <td className="p-2 text-center">{item.unit}</td>
+                <td className="p-2 text-center">{item.comment ?? ''}</td>
                 <td className="p-2 text-center">{item.unitPrice ?? ''}</td>
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan={2} className="p-2 font-semibold text-right">รวม</td>
+              <td colSpan={3} className="p-2 font-semibold text-right">รวม</td>
               <td className="p-2 text-center font-semibold">{total}</td>
             </tr>
           </tfoot>
@@ -91,7 +98,7 @@ export default function SummaryPage() {
         </div>
         <div className="mt-4 flex justify-between">
           <button className="text-red-600" onClick={clearPrices}>
-            ลบราคา
+            clear
           </button>
         </div>
     </div>
