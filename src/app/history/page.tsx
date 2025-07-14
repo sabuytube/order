@@ -42,6 +42,9 @@ export default function HistoryPage() {
               <Link href={`/order/${order._id}`} className="text-green-600 hover:underline">
                 แก้ไข
               </Link>
+              <Link href={`/price/${order._id}`} className="text-red-600 hover:underline">
+                ห้ามกด
+              </Link>
             </div>
           </div>
         ))}
