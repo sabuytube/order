@@ -55,13 +55,13 @@ export default function SummaryPage() {
   return (
     <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded">
       <h1 className="text-2xl font-bold mb-6">สรุปคำสั่งซื้อ</h1>
-      {imageUrl && (
-        <div className="mb-4">
-          <img src={imageUrl} alt="สรุปคำสั่งซื้อ" className="w-full border" />
-        </div>
-      )}
-      <div id="summary" className={imageUrl ? 'hidden' : ''}>
-        <table className="w-full mb-4 border text-sm border-collapse">
+        {imageUrl && (
+          <div className="mb-4">
+            <img src={imageUrl} alt="สรุปคำสั่งซื้อ" className="w-full border" />
+          </div>
+        )}
+        <div id="summary" className={imageUrl ? 'hidden' : ''}>
+          <table className="w-full mb-4 border text-sm border-collapse">
           <caption className="p-2 font-semibold text-center">{shopName}</caption>
           <thead>
             <tr className="border-b">
@@ -86,12 +86,12 @@ export default function SummaryPage() {
             </tr>
           </tfoot>
         </table>
+        </div>
         <div className="mt-4 flex justify-between">
           <button className="text-red-600" onClick={clearPrices}>
             ลบราคา
           </button>
         </div>
-      </div>
     </div>
   );
 }

@@ -38,8 +38,10 @@ export default function PricePage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ shopName, items }),
     });
-    // stay on the same page after saving
+    // refresh the page after saving so data is up to date
     router.refresh();
+    // force reload as well
+    window.location.reload();
   };
 
   const clearPrices = async () => {
@@ -94,7 +96,7 @@ export default function PricePage() {
           ลบราคา
         </button>
         <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
-          บันทึก
+          บันทึกราคา
         </button>
       </div>
     </div>
