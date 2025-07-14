@@ -15,6 +15,10 @@ export default function SummaryPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [shopName, setShopName] = useState('');
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const total = items.reduce(
+    (sum, item) => sum + ((item.unitPrice || 0) * (item.quantity || 1)),
+    0
+  );
 
   useEffect(() => {
     fetch(`/api/orders/${id}`)
@@ -63,6 +67,12 @@ export default function SummaryPage() {
               </tr>
             ))}
           </tbody>
+          <tfoot>
+            <tr>
+              <td colSpan={2} className="p-2 font-semibold text-right">รวม</td>
+              <td className="p-2 text-center font-semibold">{total}</td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>

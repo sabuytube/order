@@ -13,6 +13,7 @@ export default function PricePage() {
   const { id } = useParams();
   const [shopName, setShopName] = useState('');
   const [items, setItems] = useState<Item[]>([]);
+  const total = items.reduce((sum, item) => sum + (item.unitPrice || 0), 0);
 
   useEffect(() => {
     fetch(`/api/orders/${id}`)
@@ -43,7 +44,7 @@ export default function PricePage() {
   return (
     <div className="max-w-xl mx-auto bg-white shadow p-6 rounded">
       <h1 className="text-2xl font-bold mb-6">กำหนดราคา</h1>
-      <table className="w-full mb-4 text-sm">
+      <table className="w-full mb-2 text-sm">
         <thead>
           <tr className="border-b">
             <th className="p-2 text-left">ชื่อสินค้า</th>
@@ -67,8 +68,16 @@ export default function PricePage() {
             </tr>
           ))}
         </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={2} className="p-2 font-semibold text-right">
+              รวม
+            </td>
+            <td className="p-2 text-center font-semibold">{total}</td>
+          </tr>
+        </tfoot>
       </table>
-      <div className="text-right">
+      <div className="text-right mt-4">
         <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
           บันทึก
         </button>
