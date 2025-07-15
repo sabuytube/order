@@ -69,7 +69,8 @@ export default function PricePage() {
 
   return (
     <div className="max-w-xl mx-auto bg-white shadow p-6 rounded">
-      <h1 className="text-2xl font-bold mb-6">กำหนดราคา</h1>
+      <h1 className="text-2xl font-bold">กำหนดราคา (သတ်မှတ်ဈေး)</h1>
+      <p className="mb-6">หมายเหตุ โล:ကီလို, ลูก:လုံး, หัว:ထောင်, กำ:ည</p>
       <table className="w-full mb-2 text-sm">
         <thead>
           <tr className="border-b">
@@ -113,7 +114,7 @@ export default function PricePage() {
         </tfoot>
       </table>
       <div className="mt-4 flex justify-between">
-        <button className="text-red-600" onClick={clearPrices}>
+        <button className="text-red-600 hidden" onClick={clearPrices}>
           clear
         </button>
         <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
