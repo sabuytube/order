@@ -5,6 +5,7 @@ type Item = {
   unit: string;
   quantity: number;
   unitPrice?: number;
+  comment?: string;
 };
 
 export interface OrderDocument extends Document {
@@ -17,6 +18,7 @@ const ItemSchema = new Schema<Item>({
   unit: String,
   quantity: Number,
   unitPrice: Number,
+  comment: String,
 });
 
 const OrderSchema = new Schema<OrderDocument>({
