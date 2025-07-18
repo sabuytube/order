@@ -64,7 +64,7 @@ export default function SummaryPage() {
   }, [items, imageUrl]);
 
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded">
+    <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded relative">
       <h1 className="text-2xl font-bold mb-6">สรุปคำสั่งซื้อ</h1>
         {imageUrl && (
           <div className="mb-4">
@@ -109,6 +109,11 @@ export default function SummaryPage() {
             clear
           </button>
         </div>
+      {loading && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+          <div className="bg-white p-4 rounded shadow text-lg">Loading...</div>
+        </div>
+      )}
     </div>
   );
 }
