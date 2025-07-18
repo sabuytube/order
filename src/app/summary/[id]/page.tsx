@@ -17,12 +17,14 @@ export default function SummaryPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [shopName, setShopName] = useState('');
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const total = items.reduce(
     (sum, item) => sum + ((item.unitPrice || 0) * (item.quantity || 1)),
     0
   );
 
   const clearPrices = async () => {
+    if (loading) return;
     const cleared = items.map((item) => ({
       ...item,
       unitPrice: undefined,
@@ -45,7 +47,9 @@ export default function SummaryPage() {
       .then((data) => {
         setShopName(data.shopName);
         setItems(data.items);
-      });
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, [id]);
 
 
@@ -97,7 +101,11 @@ export default function SummaryPage() {
         </table>
         </div>
         <div className="mt-4 flex justify-between">
-          <button className="text-red-600" onClick={clearPrices}>
+          <button
+            className="text-red-600 disabled:opacity-50"
+            onClick={clearPrices}
+            disabled={loading}
+          >
             clear
           </button>
         </div>

@@ -93,7 +93,11 @@ export default function OrderPage() {
         <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={addItem}>
           + เพิ่มรายการ
         </button>
-        <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
+        <button
+          className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
+          onClick={submit}
+          disabled={!shopName.trim()}
+        >
           ส่งใบสั่งซื้อ
         </button>
       </div>

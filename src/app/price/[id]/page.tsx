@@ -14,6 +14,7 @@ export default function PricePage() {
   const { id } = useParams();
   const [shopName, setShopName] = useState('');
   const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
   const total = items.reduce((sum, item) => sum + (item.unitPrice || 0), 0);
 
   useEffect(() => {
@@ -22,7 +23,9 @@ export default function PricePage() {
       .then((data) => {
         setShopName(data.shopName);
         setItems(data.items);
-      });
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, [id]);
 
   const updatePrice = (index: number, value: string) => {
@@ -41,6 +44,7 @@ export default function PricePage() {
   };
 
   const submit = async () => {
+    if (loading) return;
     await fetch(`/api/orders/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -53,6 +57,7 @@ export default function PricePage() {
   };
 
   const clearPrices = async () => {
+    if (loading) return;
     const cleared = items.map((item) => ({
       ...item,
       unitPrice: undefined,
@@ -114,10 +119,18 @@ export default function PricePage() {
         </tfoot>
       </table>
       <div className="mt-4 flex justify-between">
-        <button className="text-red-600 hidden" onClick={clearPrices}>
+        <button
+          className="text-red-600 hidden disabled:opacity-50"
+          onClick={clearPrices}
+          disabled={loading}
+        >
           clear
         </button>
-        <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
+        <button
+          className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
+          onClick={submit}
+          disabled={loading}
+        >
           บันทึกราคา
         </button>
       </div>
