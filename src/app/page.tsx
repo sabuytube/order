@@ -12,15 +12,20 @@ interface Order {
 export default function HomePage() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/orders')
       .then((res) => res.json())
-      .then((data) => setOrders(data));
+      .then((data) => {
+        setOrders(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   return (
-    <div className="mt-10 max-w-2xl mx-auto">
+    <div className="mt-10 max-w-2xl mx-auto relative">
       <h1 className="text-3xl font-bold mb-4 text-center">ระบบจัดการคำสั่งซื้อ</h1>
       <p className="mb-6 text-gray-600 text-center">
         สร้างและจัดการคำสั่งซื้อได้ง่ายๆ
@@ -63,6 +68,11 @@ export default function HomePage() {
           </div>
         ))}
       </div>
+      {loading && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+          <div className="bg-white p-4 rounded shadow text-lg">Loading...</div>
+        </div>
+      )}
     </div>
   );
 }

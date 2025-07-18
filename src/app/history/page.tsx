@@ -10,16 +10,21 @@ interface Order {
 
 export default function HistoryPage() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/orders')
       .then((res) => res.json())
-      .then((data) => setOrders(data));
+      .then((data) => {
+        setOrders(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
 
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded">
+    <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded relative">
       <h1 className="text-2xl font-bold mb-6">ประวัติการสั่งซื้อ</h1>
       <div className="mb-4 text-right">
         <Link
@@ -49,6 +54,11 @@ export default function HistoryPage() {
           </div>
         ))}
       </div>
+      {loading && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+          <div className="bg-white p-4 rounded shadow text-lg">Loading...</div>
+        </div>
+      )}
     </div>
   );
 }

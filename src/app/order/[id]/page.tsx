@@ -41,6 +41,7 @@ export default function EditOrderPage() {
 
   const submit = async () => {
     if (loading) return;
+    setLoading(true);
     await fetch(`/api/orders/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },

@@ -25,6 +25,7 @@ export default function SummaryPage() {
 
   const clearPrices = async () => {
     if (loading) return;
+    setLoading(true);
     const cleared = items.map((item) => ({
       ...item,
       unitPrice: undefined,

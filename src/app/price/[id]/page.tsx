@@ -45,6 +45,7 @@ export default function PricePage() {
 
   const submit = async () => {
     if (loading) return;
+    setLoading(true);
     await fetch(`/api/orders/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -58,6 +59,7 @@ export default function PricePage() {
 
   const clearPrices = async () => {
     if (loading) return;
+    setLoading(true);
     const cleared = items.map((item) => ({
       ...item,
       unitPrice: undefined,
@@ -70,10 +72,11 @@ export default function PricePage() {
       body: JSON.stringify({ shopName, items: cleared }),
     });
     router.refresh();
+    setLoading(false);
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white shadow p-6 rounded">
+    <div className="max-w-xl mx-auto bg-white shadow p-6 rounded relative">
       <h1 className="text-2xl font-bold">กำหนดราคา (သတ်မှတ်ဈေး)</h1>
       <p className="mb-6">หมายเหตุ โล:ကီလို, ลูก:လုံး, หัว:ထောင်, กำ:ည</p>
       <table className="w-full mb-2 text-sm">
@@ -134,6 +137,11 @@ export default function PricePage() {
           บันทึกราคา
         </button>
       </div>
+      {loading && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+          <div className="bg-white p-4 rounded shadow text-lg">Loading...</div>
+        </div>
+      )}
     </div>
   );
 }

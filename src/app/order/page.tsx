@@ -11,6 +11,7 @@ export default function OrderPage() {
   const router = useRouter();
   const [shopName, setShopName] = useState('');
   const [items, setItems] = useState<Item[]>([{ name: '', unit: '' }]);
+  const [loading, setLoading] = useState(false);
 
 
   const addItem = () => {
@@ -23,6 +24,8 @@ export default function OrderPage() {
   };
 
   const submit = async () => {
+    if (loading) return;
+    setLoading(true);
     const res = await fetch('/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -33,7 +36,7 @@ export default function OrderPage() {
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white shadow p-6 rounded">
+    <div className="max-w-xl mx-auto bg-white shadow p-6 rounded relative">
       <h1 className="text-2xl font-bold mb-6">สร้างใบสั่งซื้อ</h1>
       <input
         className="border rounded p-2 w-full mb-4"
@@ -60,17 +63,26 @@ export default function OrderPage() {
         </div>
       ))}
       <div className="mt-4 flex justify-end gap-2">
-        <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={addItem}>
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+          onClick={addItem}
+          disabled={loading}
+        >
           + เพิ่มรายการ
         </button>
         <button
           className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
           onClick={submit}
-          disabled={!shopName.trim()}
+          disabled={!shopName.trim() || loading}
         >
           ส่งใบสั่งซื้อ
         </button>
       </div>
+      {loading && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+          <div className="bg-white p-4 rounded shadow text-lg">Loading...</div>
+        </div>
+      )}
     </div>
   );
 }
