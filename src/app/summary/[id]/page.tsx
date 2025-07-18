@@ -17,12 +17,15 @@ export default function SummaryPage() {
   const [items, setItems] = useState<Item[]>([]);
   const [shopName, setShopName] = useState('');
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const total = items.reduce(
     (sum, item) => sum + ((item.unitPrice || 0) * (item.quantity || 1)),
     0
   );
 
   const clearPrices = async () => {
+    if (loading) return;
+    setLoading(true);
     const cleared = items.map((item) => ({
       ...item,
       unitPrice: undefined,
@@ -45,7 +48,9 @@ export default function SummaryPage() {
       .then((data) => {
         setShopName(data.shopName);
         setItems(data.items);
-      });
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, [id]);
 
 
@@ -60,7 +65,7 @@ export default function SummaryPage() {
   }, [items, imageUrl]);
 
   return (
-    <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded">
+    <div className="max-w-2xl mx-auto bg-white shadow p-6 rounded relative">
       <h1 className="text-2xl font-bold mb-6">สรุปคำสั่งซื้อ</h1>
         {imageUrl && (
           <div className="mb-4">
@@ -97,10 +102,19 @@ export default function SummaryPage() {
         </table>
         </div>
         <div className="mt-4 flex justify-between">
-          <button className="text-red-600" onClick={clearPrices}>
+          <button
+            className="text-red-600 disabled:opacity-50"
+            onClick={clearPrices}
+            disabled={loading}
+          >
             clear
           </button>
         </div>
+      {loading && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+          <div className="bg-white p-4 rounded shadow text-lg">Loading...</div>
+        </div>
+      )}
     </div>
   );
 }

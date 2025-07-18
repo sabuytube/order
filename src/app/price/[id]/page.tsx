@@ -14,6 +14,7 @@ export default function PricePage() {
   const { id } = useParams();
   const [shopName, setShopName] = useState('');
   const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
   const total = items.reduce((sum, item) => sum + (item.unitPrice || 0), 0);
 
   useEffect(() => {
@@ -22,7 +23,9 @@ export default function PricePage() {
       .then((data) => {
         setShopName(data.shopName);
         setItems(data.items);
-      });
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, [id]);
 
   const updatePrice = (index: number, value: string) => {
@@ -41,6 +44,8 @@ export default function PricePage() {
   };
 
   const submit = async () => {
+    if (loading) return;
+    setLoading(true);
     await fetch(`/api/orders/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -53,6 +58,8 @@ export default function PricePage() {
   };
 
   const clearPrices = async () => {
+    if (loading) return;
+    setLoading(true);
     const cleared = items.map((item) => ({
       ...item,
       unitPrice: undefined,
@@ -65,10 +72,11 @@ export default function PricePage() {
       body: JSON.stringify({ shopName, items: cleared }),
     });
     router.refresh();
+    setLoading(false);
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white shadow p-6 rounded">
+    <div className="max-w-xl mx-auto bg-white shadow p-6 rounded relative">
       <h1 className="text-2xl font-bold">กำหนดราคา (သတ်မှတ်ဈေး)</h1>
       <p className="mb-6">หมายเหตุ โล:ကီလို, ลูก:လုံး, หัว:ထောင်, กำ:ည</p>
       <table className="w-full mb-2 text-sm">
@@ -114,13 +122,26 @@ export default function PricePage() {
         </tfoot>
       </table>
       <div className="mt-4 flex justify-between">
-        <button className="text-red-600 hidden" onClick={clearPrices}>
+        <button
+          className="text-red-600 hidden disabled:opacity-50"
+          onClick={clearPrices}
+          disabled={loading}
+        >
           clear
         </button>
-        <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
+        <button
+          className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
+          onClick={submit}
+          disabled={loading}
+        >
           บันทึกราคา
         </button>
       </div>
+      {loading && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+          <div className="bg-white p-4 rounded shadow text-lg">Loading...</div>
+        </div>
+      )}
     </div>
   );
 }

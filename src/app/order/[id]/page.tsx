@@ -12,13 +12,7 @@ export default function EditOrderPage() {
   const { id } = useParams();
   const [shopName, setShopName] = useState('');
   const [items, setItems] = useState<Item[]>([]);
-  const [products, setProducts] = useState<string[]>([]);
-
-  useEffect(() => {
-    fetch('/api/products')
-      .then((res) => res.json())
-      .then((data) => setProducts(data.map((p: { name: string }) => p.name)));
-  }, []);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`/api/orders/${id}`)
@@ -26,19 +20,11 @@ export default function EditOrderPage() {
       .then((data) => {
         setShopName(data.shopName);
         setItems(data.items);
-      });
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, [id]);
 
-  const addProduct = async () => {
-    const name = prompt('ชื่อสินค้า');
-    if (!name) return;
-    await fetch('/api/products', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name }),
-    });
-    setProducts((prev) => [...prev, name]);
-  };
 
   const addItem = () => {
     setItems([...items, { name: '', unit: '' }]);
@@ -54,6 +40,8 @@ export default function EditOrderPage() {
   };
 
   const submit = async () => {
+    if (loading) return;
+    setLoading(true);
     await fetch(`/api/orders/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -63,7 +51,7 @@ export default function EditOrderPage() {
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white shadow p-6 rounded">
+    <div className="max-w-xl mx-auto bg-white shadow p-6 rounded relative">
       <h1 className="text-2xl font-bold mb-6">แก้ไขใบสั่งซื้อ</h1>
       <input
         className="border rounded p-2 w-full mb-4"
@@ -73,23 +61,14 @@ export default function EditOrderPage() {
       />
       {items.map((item, index) => (
         <div key={index} className="mb-3 flex gap-2 items-center">
-          <div className="flex-1 relative">
+          <div className="flex-1">
             <input
-              list={`products-${index}`}
               className="border rounded p-2 w-full"
               placeholder="ชื่อสินค้า"
               value={item.name}
               onChange={(e) => updateItem(index, 'name', e.target.value)}
             />
-            <datalist id={`products-${index}`}>
-              {products.map((p) => (
-                <option key={p} value={p} />
-              ))}
-            </datalist>
           </div>
-          <button type="button" onClick={addProduct} className="px-2 bg-gray-200 rounded">
-            +
-          </button>
           <input
             className="border rounded p-2 w-24"
             placeholder="หน่วย"
@@ -106,13 +85,26 @@ export default function EditOrderPage() {
         </div>
       ))}
       <div className="mt-4 flex justify-end gap-2">
-        <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={addItem}>
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50"
+          onClick={addItem}
+          disabled={loading}
+        >
           + เพิ่มรายการ
         </button>
-        <button className="bg-green-600 text-white px-4 py-2 rounded" onClick={submit}>
+        <button
+          className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
+          onClick={submit}
+          disabled={!shopName.trim() || loading}
+        >
           บันทึก
         </button>
       </div>
+      {loading && (
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+          <div className="bg-white p-4 rounded shadow text-lg">Loading...</div>
+        </div>
+      )}
     </div>
   );
 }
