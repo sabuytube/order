@@ -86,7 +86,7 @@ export default function SummaryPage() {
           <tbody>
             {items.map((item, index) => (
               <tr key={index} className="border-b">
-                <td className="p-2">{item.name}</td>
+                <td className="p-2">{`${index + 1}. ${item.name}`}</td>
                 <td className="p-2 text-center">{item.unit}</td>
                 <td className="p-2 text-center">{item.comment ?? ''}</td>
                 <td className="p-2 text-center">{item.unitPrice ?? ''}</td>
