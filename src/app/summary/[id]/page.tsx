@@ -18,7 +18,8 @@ export default function SummaryPage() {
   const [shopName, setShopName] = useState('');
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const total = items.reduce(
+  const visibleItems = items.filter((item) => item.unit?.trim() !== '');
+  const total = visibleItems.reduce(
     (sum, item) => sum + ((item.unitPrice || 0) * (item.quantity || 1)),
     0
   );
@@ -77,7 +78,6 @@ export default function SummaryPage() {
           <caption className="p-2 font-semibold text-center">{shopName}</caption>
           <thead>
             <tr className="border-b">
-              <th className="p-2 text-center">ลำดับ</th>
               <th className="p-2 text-left">ชื่อสินค้า</th>
               <th className="p-2">หน่วย</th>
               <th className="p-2">comment</th>
@@ -85,7 +85,7 @@ export default function SummaryPage() {
             </tr>
           </thead>
           <tbody>
-            {items.map((item, index) => (
+            {visibleItems.map((item, index) => (
               <tr key={index} className="border-b">
                 <td className="p-2">{`${index + 1}. ${item.name}`}</td>
                 <td className="p-2 text-center">{item.unit}</td>
@@ -96,7 +96,7 @@ export default function SummaryPage() {
           </tbody>
           <tfoot>
             <tr>
-              <td colSpan={4} className="p-2 font-semibold text-right">รวม</td>
+              <td colSpan={3} className="p-2 font-semibold text-right">รวม</td>
               <td className="p-2 text-center font-semibold">{total}</td>
             </tr>
           </tfoot>
