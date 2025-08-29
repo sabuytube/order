@@ -18,7 +18,8 @@ export default function SummaryPage() {
   const [shopName, setShopName] = useState('');
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const total = items.reduce(
+  const visibleItems = items.filter((item) => item.unit?.trim() !== '');
+  const total = visibleItems.reduce(
     (sum, item) => sum + ((item.unitPrice || 0) * (item.quantity || 1)),
     0
   );
@@ -84,7 +85,7 @@ export default function SummaryPage() {
             </tr>
           </thead>
           <tbody>
-            {items.map((item, index) => (
+            {visibleItems.map((item, index) => (
               <tr key={index} className="border-b">
                 <td className="p-2">{`${index + 1}. ${item.name}`}</td>
                 <td className="p-2 text-center">{item.unit}</td>
